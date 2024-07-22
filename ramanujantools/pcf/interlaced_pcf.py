@@ -14,8 +14,12 @@ class InterlacedPCF(PCF):
     matrices representing each numerator-denominator pair.
     For example, consider a continued fraction with three polynomials appearing as the partial
     numerator - $b_1, b_2, b_3$ - and two polynomials appearing as the partial denominator - $a_1, a_2$:
-    The Interlaced PCF is represented by
-    $M_n = \prod_{i=1}^6 \begin{pmatrix} 0 & b_i(n) \cr 1 & a_i(n) \end{pmatrix}$,
+    $$a_0 + \cfrac{b_1(1)}{a_1(1) + \cfrac{b_2(1)}{a_2(1) + \cfrac{b_3(1)}{a_1(1) + \cfrac{b_1(1)}{a_2(1) +
+    \cfrac{b_2(1)}{a_1(1) + \cfrac{b_3(1)}{a_2(1) + \cfrac{b_1(2)}{\ddots + \cfrac{b_1(n)}{a_1(n) +
+    \cfrac{b_2(n)}{a_2(n) + \cfrac{b_3(n)}{a_1(1) + \cfrac{b_1(n)}{a_2(n) + \cfrac{b_2(n)}{a_1(n) +
+    \cfrac{b_3(n)}{a_2(n) + \ddots}}}}}}}}}}}}}$$
+    This Interlaced PCF is represented by
+    $M_n = \prod_{i=1}^6 \begin{pmatrix} 0 & b_{(i \mod 3)}(n) \cr 1 & a_{(i \mod 2)}(n) \end{pmatrix}$,
     where $6 = lcm(3, 2)$ is the period of the continued fraction and the sequences of polynomials are repeated
     to match the period of the continued fraction.
     """
@@ -31,10 +35,10 @@ class InterlacedPCF(PCF):
         """The free constant of the continued fraction."""
 
         self.a_dict = {f'a_{i+1}': val for (i, val) in enumerate(list(a_dict.values()))}
-        """A dictionary of polynomials representing `a_n`, the partial denominator of the continued fraction."""
+        """A dictionary of polynomials representing a_n, the partial denominator of the continued fraction."""
 
         self.b_dict = {f'b_{i+1}': val for (i, val) in enumerate(list(b_dict.values()))}
-        """A dictionary of polynomials representing `b_n`, the partial numerator of the continued fraction."""
+        """A dictionary of polynomials representing b_n, the partial numerator of the continued fraction."""
 
         self.period = sp.lcm(len(a_dict), len(b_dict))
         """The lcm of the lengths of `a_dict` and `b_dict`."""
